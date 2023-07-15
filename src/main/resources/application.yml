@@ -13,10 +13,11 @@ spring:
     open-in-view: false
 
 application:
-  title: Bank API
+  title: Unicomer Bank API
   version: 0.0.1-SNAPSHOT
   api:
     version: v1
+    base-path: /api
 
 logging:
   pattern:

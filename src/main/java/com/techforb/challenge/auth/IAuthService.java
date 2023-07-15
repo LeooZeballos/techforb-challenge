@@ -1,4 +1,4 @@
-package com.techforb.challenge.user;
+package com.techforb.challenge.auth;
 
 import com.techforb.challenge.request.LoginRequest;
 import com.techforb.challenge.request.RegisterRequest;
@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
  * @see UserDetailsService
  * @author Leonel Zeballos
  */
-public interface IUserService extends UserDetailsService {
+public interface IAuthService extends UserDetailsService {
     void register(RegisterRequest registerRequest);
 
     TokenResponse login(LoginRequest loginRequest);

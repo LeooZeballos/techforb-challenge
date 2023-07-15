@@ -1,5 +1,7 @@
 package com.techforb.challenge.config;
 
+import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,18 +19,30 @@ import org.springframework.security.web.SecurityFilterChain;
  * @author Leonel Zeballos
  */
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     /**
-     * The API version.
+     * The application API version.
      */
     @Value("${application.api.version}")
-    private String apiVersion;
+    private String version;
+
+    /**
+     * The application API base path.
+     */
+    @Value("${application.api.base-path}")
+    private String basePath;
 
     /**
      * The base API path.
      */
-    private final String baseApiPath = "/api/" + apiVersion;
+    private String apiPath;
+
+    @PostConstruct
+    public void init() {
+        apiPath = basePath + "/" + version;
+    }
 
     /**
      * Configures the security filter chain.
@@ -44,10 +58,10 @@ public class SecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorizeRequests) -> authorizeRequests
                         .requestMatchers(
-                                baseApiPath +"/auth/**",       // Authentication endpoints
-                                "/h2-console/**"                          // H2 console
+                                apiPath +"/auth/**",       // Authentication endpoints
+                                "/h2-console/**"           // H2 console
                         ).permitAll()
-                        .anyRequest().authenticated() // Any other request must be authenticated
+                        .anyRequest().authenticated()        // Any other request must be authenticated
                 )
                 .httpBasic(Customizer.withDefaults())
                 .oauth2ResourceServer(jwt -> jwt.jwt(Customizer.withDefaults()))
