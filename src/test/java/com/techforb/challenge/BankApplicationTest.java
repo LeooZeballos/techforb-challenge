@@ -3,6 +3,11 @@ package com.techforb.challenge;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+/**
+ * The application entry point.
+ *
+ * @author Leonel Zeballos
+ */
 @SpringBootTest
 class BankApplicationTest {
 
