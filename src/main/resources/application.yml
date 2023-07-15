@@ -15,8 +15,16 @@ spring:
 application:
   title: Bank API
   version: 0.0.1-SNAPSHOT
+  api:
+    version: v1
 
 logging:
   pattern:
     dateformat: yyyy-MM-dd HH:mm:ss
     level: '%5p'
+
+jwt:
+  private:
+    key: classpath:app.key
+  public:
+    key: classpath:app.pub

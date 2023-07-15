@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 /**
- * The application entry point.
+ * The main application test class.
  *
  * @author Leonel Zeballos
  */
