@@ -9,6 +9,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * The authentication controller. Contains endpoints for authenticating users.
+ * All endpoints are prefixed with /api/v1/auth. The endpoints are not secured.
+ *
+ * @author Leonel Zeballos
+ */
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
@@ -20,6 +26,13 @@ public class AuthController {
      */
     private final IAuthService authService;
 
+    /**
+     * Authenticates a user by logging them in.
+     *
+     * @param loginRequest The login request containing the user's credentials.
+     * @return A ResponseEntity containing a TokenResponse with the generated token.
+     *         If there's an error, the response body will contain an error message.
+     */
     @PostMapping("/login")
     public ResponseEntity<TokenResponse> login(@RequestBody LoginRequest loginRequest) {
         try {
@@ -34,6 +47,13 @@ public class AuthController {
         }
     }
 
+    /**
+     * Registers a new user.
+     *
+     * @param registerRequest The registration request containing the user's details.
+     * @return A ResponseEntity containing a TokenResponse with the generated token.
+     *         If there's an error, the response body will contain an error message.
+     */
     @PostMapping("/register")
     public ResponseEntity<TokenResponse> register(@RequestBody RegisterRequest registerRequest) {
         try {
@@ -48,6 +68,13 @@ public class AuthController {
         }
     }
 
+    /**
+     * Refreshes an access token.
+     *
+     * @param refreshRequest The refresh request containing the refresh token.
+     * @return A ResponseEntity containing a TokenResponse with the new access token.
+     *         If there's an error, the response body will contain an error message.
+     */
     @PostMapping("/refresh")
     public ResponseEntity<TokenResponse> refresh(@RequestBody RefreshRequest refreshRequest) {
         try {
