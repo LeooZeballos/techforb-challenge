@@ -3,6 +3,7 @@ package com.techforb.challenge.auth;
 import com.techforb.challenge.request.LoginRequest;
 import com.techforb.challenge.request.RegisterRequest;
 import com.techforb.challenge.response.TokenResponse;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 /**
@@ -12,9 +13,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
  * @author Leonel Zeballos
  */
 public interface IAuthService extends UserDetailsService {
-    void register(RegisterRequest registerRequest);
+    TokenResponse register(RegisterRequest registerRequest);
 
     TokenResponse login(LoginRequest loginRequest);
 
-    void logout();
+    TokenResponse generateToken(UserDetails user);
+
+    TokenResponse refreshToken(String refreshToken);
 }

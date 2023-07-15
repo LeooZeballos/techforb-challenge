@@ -1,5 +1,5 @@
 package com.techforb.challenge.user;
 
-public enum TipoDocumento {
+public enum DocumentType {
     DNI, CEDULA, PASAPORTE
 }

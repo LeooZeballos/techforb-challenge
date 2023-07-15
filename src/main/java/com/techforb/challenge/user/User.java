@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @Entity
 @Table(
         name = "_user", // user is a reserved word in Postgres
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"dni", "tipo_documento"})}
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"dni", "document_type"})}
 )
 @Data
 @Builder
@@ -106,8 +106,8 @@ public class User implements UserDetails {
     /**
      * The dni type. It has to be unique with the dni.
      */
-    @Column(nullable = false, name = "tipo_documento")
-    private TipoDocumento tipoDocumento;
+    @Column(nullable = false, name = "document_type")
+    private DocumentType documentType;
 
     /**
      * The user roles.
