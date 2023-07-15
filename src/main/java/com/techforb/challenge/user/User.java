@@ -1,5 +1,6 @@
 package com.techforb.challenge.user;
 
+import com.techforb.challenge.account.Account;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -108,6 +109,12 @@ public class User implements UserDetails {
      */
     @Column(nullable = false, name = "document_type")
     private DocumentType documentType;
+
+    /**
+     * The user accounts.
+     */
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Account> accounts;
 
     /**
      * The user roles.
