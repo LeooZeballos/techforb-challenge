@@ -9,6 +9,7 @@ import org.springframework.lang.NonNull;
  */
 public record LoginRequest(
         @NonNull String dni,
+        @NonNull String documentType,
         @NonNull String password
 ) {
 }

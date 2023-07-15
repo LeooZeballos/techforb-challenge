@@ -112,7 +112,7 @@ public class User implements UserDetails {
     /**
      * The user roles.
      */
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role")
     @Enumerated(EnumType.STRING)
     private List<Role> roles;
@@ -135,11 +135,11 @@ public class User implements UserDetails {
     /**
      * Returns the user username. It is used by Spring Security.
      *
-     * @return The user username. It is the dni.
+     * @return The user username. It is the document type + : + dni.
      */
     @Override
     public String getUsername() {
-        return dni;
+        return documentType + ":" + dni;
     }
 
 }

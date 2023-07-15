@@ -12,12 +12,13 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     /**
-     * Find a user by its D.N.I. The D.N.I. is unique.
+     * Find a user by its D.N.I and DocumentType. The combination of both fields is unique.
      *
      * @param dni The D.N.I. to search for.
+     * @param documentType The DocumentType to search for.
      * @return An optional containing the user if found, or an empty optional otherwise.
      */
-    Optional<User> findByDni(String dni);
+    Optional<User> findByDocumentTypeAndDni(DocumentType documentType, String dni);
 
     /**
      * Check if a user exists by its D.N.I and DocumentType.

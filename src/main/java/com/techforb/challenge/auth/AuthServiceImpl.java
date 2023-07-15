@@ -3,18 +3,21 @@ package com.techforb.challenge.auth;
 import com.techforb.challenge.request.LoginRequest;
 import com.techforb.challenge.request.RegisterRequest;
 import com.techforb.challenge.response.TokenResponse;
+import com.techforb.challenge.user.DocumentType;
+import com.techforb.challenge.user.Role;
 import com.techforb.challenge.user.User;
 import com.techforb.challenge.user.UserRepository;
+import com.techforb.challenge.request.RefreshRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.oauth2.jwt.JwtClaimsSet;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
+import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -38,6 +41,17 @@ public class AuthServiceImpl implements IAuthService {
      * The JWT encoder.
      */
     private final JwtEncoder jwtEncoder;
+
+    /**
+     * The JWT decoder.
+     */
+    private final JwtDecoder jwtDecoder;
+
+    /**
+     * The JWT expiration time in seconds.
+     */
+    private final static long JWT_EXPIRATION_TIME = 60 * 60 * 24; // 1 day
+
 
     /**
      * Register a new user. It also generates a JWT token.
@@ -70,6 +84,7 @@ public class AuthServiceImpl implements IAuthService {
                 .firstName(registerRequest.firstName())
                 .lastName(registerRequest.lastName())
                 .documentType(registerRequest.documentType())
+                .roles(List.of(Role.USER))
                 .build();
 
         // Save user
@@ -89,10 +104,10 @@ public class AuthServiceImpl implements IAuthService {
     public TokenResponse login(LoginRequest loginRequest) {
         // Validate user credentials
         try {
-            UserDetails user = loadUserByUsername(loginRequest.dni());
+            UserDetails user = loadUserByUsername(loginRequest.documentType() + ":" + loginRequest.dni());
             return generateToken(user);
         } catch (UsernameNotFoundException e) {
-            throw new IllegalArgumentException("Invalid credentials for dni: " + loginRequest.dni());
+            throw new IllegalArgumentException("Invalid credentials for " + loginRequest.documentType().toLowerCase() + ": " + loginRequest.dni());
         }
     }
 
@@ -105,7 +120,6 @@ public class AuthServiceImpl implements IAuthService {
     public TokenResponse generateToken(UserDetails user) {
         // Generate a JWT token
         Instant now = Instant.now();
-        long expiry = 36000L; // 10 hours
 
         // Generate scope
         String scope = user.getAuthorities().stream()
@@ -116,26 +130,38 @@ public class AuthServiceImpl implements IAuthService {
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer("self")
                 .issuedAt(now)
-                .expiresAt(now.plusSeconds(expiry))
+                .expiresAt(now.plusSeconds(JWT_EXPIRATION_TIME))
                 .subject(user.getUsername())
                 .claim("scope", scope)
                 .build();
 
         // Generate token from claims
-        return new TokenResponse(jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue());
+        return TokenResponse.builder()
+                .token(jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue())
+                .build();
     }
 
     /**
      * Load a user by username.
      *
-     * @param dni The dni.
+     * @param username The username.
      * @return The user details.
      * @throws UsernameNotFoundException If the user is not found.
      */
     @Override
-    public UserDetails loadUserByUsername(String dni) throws UsernameNotFoundException {
-        return userRepository.findByDni(dni)
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        // Split username into documentType and dni (e.g., "DNI:123456789")
+        String[] parts = username.split(":");
+
+        // Validate format
+        if (parts.length != 2) {
+            throw new IllegalArgumentException("Invalid documentTypePlusDni format");
+        }
+
+        // Find user by dni and documentType
+        return userRepository.findByDocumentTypeAndDni(DocumentType.valueOf(parts[0]), parts[1])
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
     }
 
     /**
@@ -145,9 +171,31 @@ public class AuthServiceImpl implements IAuthService {
      * @return The token response.
      */
     @Override
-    public TokenResponse refreshToken(String refreshToken) {
-        // TODO: Implement refresh token
-        return null;
+    public TokenResponse refreshToken(RefreshRequest refreshToken) {
+        // Decode the refresh token
+        Jwt jwt = jwtDecoder.decode(refreshToken.token());
+
+        // Get the claims
+        Map<String, Object> claims = jwt.getClaims();
+
+        // Get the user
+        UserDetails user = loadUserByUsername(claims.get("sub").toString());
+
+        // Validate the scope
+        if (!user.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(" "))
+                .equals(claims.get("scope").toString())) {
+            throw new IllegalArgumentException("Invalid scope");
+        }
+
+        // Validate the expiration time
+        if (jwt.getExpiresAt() != null && Instant.now().isAfter(jwt.getExpiresAt())) {
+            throw new IllegalArgumentException("Token expired");
+        }
+
+        // Generate a new token
+        return generateToken(user);
     }
 
 }
