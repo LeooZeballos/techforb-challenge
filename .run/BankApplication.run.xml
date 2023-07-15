@@ -2,7 +2,7 @@
   <configuration default="false" name="BankApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
     <option name="ACTIVE_PROFILES" value="dev" />
     <module name="challenge" />
-    <option name="SPRING_BOOT_MAIN_CLASS" value="com.techforb.challenge.BankApplication" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.techforb.challenge.BankApplicationTest" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
