@@ -5,12 +5,14 @@ import com.techforb.challenge.request.RefreshRequest;
 import com.techforb.challenge.request.RegisterRequest;
 import com.techforb.challenge.response.TokenResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
+@Slf4j
 public class AuthController {
 
     /**
@@ -26,6 +28,7 @@ public class AuthController {
             return ResponseEntity.badRequest().body(
                     TokenResponse.builder().error(e.getMessage()).build());
         } catch (Exception e) {
+            log.error("Error while logging in", e);
             return ResponseEntity.internalServerError().body(
                     TokenResponse.builder().error(e.getMessage()).build());
         }
@@ -39,6 +42,7 @@ public class AuthController {
             return ResponseEntity.badRequest().body(
                     TokenResponse.builder().error(e.getMessage()).build());
         } catch (Exception e) {
+            log.error("Error while registering", e);
             return ResponseEntity.internalServerError().body(
                     TokenResponse.builder().error(e.getMessage()).build());
         }
@@ -52,6 +56,7 @@ public class AuthController {
             return ResponseEntity.badRequest().body(
                     TokenResponse.builder().error(e.getMessage()).build());
         } catch (Exception e) {
+            log.error("Error while refreshing token", e);
             return ResponseEntity.internalServerError().body(
                     TokenResponse.builder().error(e.getMessage()).build());
         }
