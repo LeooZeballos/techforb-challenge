@@ -45,6 +45,11 @@ public abstract class Card {
     private String cvv;
 
     /**
+     * The card titular.
+     */
+    private String titular;
+
+    /**
      * The card owner.
      */
     @ManyToOne
