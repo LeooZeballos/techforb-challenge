@@ -2,7 +2,10 @@ package com.techforb.challenge.menu;
 
 import com.techforb.challenge.user.Role;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
 
 import java.util.List;
 
@@ -28,24 +31,29 @@ public class Option {
      * The name of the option.
      */
     @Column(name = "name")
+    @Length(min = 3, max = 50)
     private String name;
 
     /**
      * The icon of the option.
      */
     @Column(name = "icon")
+    @Length(min = 3, max = 50)
     private String icon;
 
     /**
      * The url of the option.
      */
     @Column(name = "url")
+    @Length(max = 2048) // max length of a URL
     private String url;
 
     /**
      * The order of the option.
      */
     @Column(name = "_order")
+    @Min(0)
+    @Max(100)
     private int order;
 
     /**
