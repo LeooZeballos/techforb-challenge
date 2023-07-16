@@ -1,6 +1,7 @@
 package com.techforb.challenge.account;
 
 import com.techforb.challenge.card.Card;
+import com.techforb.challenge.transaction.Transaction;
 import com.techforb.challenge.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -71,5 +72,12 @@ public class Account {
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     @Builder.Default
     private List<Card> cards = List.of();
+
+    /**
+     * The transactions associated with the account.
+     */
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<Transaction> transactions = List.of();
 
 }

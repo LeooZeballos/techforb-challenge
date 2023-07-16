@@ -1,10 +1,12 @@
 package com.techforb.challenge.card;
 
 import com.techforb.challenge.account.Account;
+import com.techforb.challenge.transaction.Transaction;
 import com.techforb.challenge.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * Represents a card owned by a user.
@@ -60,6 +62,12 @@ public abstract class Card {
      */
     @ManyToOne
     private Account account;
+
+    /**
+     * The card transactions.
+     */
+    @OneToMany(mappedBy = "card", fetch = FetchType.LAZY)
+    private List<Transaction> transactions;
 
 }
 
