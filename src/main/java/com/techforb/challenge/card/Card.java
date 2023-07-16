@@ -1,5 +1,6 @@
 package com.techforb.challenge.card;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.techforb.challenge.account.Account;
 import com.techforb.challenge.transaction.Transaction;
 import com.techforb.challenge.user.User;
@@ -55,18 +56,21 @@ public abstract class Card {
      * The card owner.
      */
     @ManyToOne
+    @JsonIgnore
     private User owner;
 
     /**
      * The card account.
      */
     @ManyToOne
+    @JsonIgnore
     private Account account;
 
     /**
      * The card transactions.
      */
     @OneToMany(mappedBy = "card", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Transaction> transactions;
 
 }

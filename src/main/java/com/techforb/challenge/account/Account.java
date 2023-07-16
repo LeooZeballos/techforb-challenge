@@ -4,10 +4,7 @@ import com.techforb.challenge.card.Card;
 import com.techforb.challenge.transaction.Transaction;
 import com.techforb.challenge.user.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,6 +20,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class Account {
 
     /**
@@ -64,6 +62,7 @@ public class Account {
      */
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @ToString.Exclude
     private User user;
 
     /**

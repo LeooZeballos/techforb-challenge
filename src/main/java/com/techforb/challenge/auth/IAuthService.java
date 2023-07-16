@@ -4,8 +4,11 @@ import com.techforb.challenge.request.LoginRequest;
 import com.techforb.challenge.request.RefreshRequest;
 import com.techforb.challenge.request.RegisterRequest;
 import com.techforb.challenge.response.TokenResponse;
+import com.techforb.challenge.user.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 
 /**
  * The user service interface. It extends {@link UserDetailsService} to be used by Spring Security.
@@ -46,5 +49,23 @@ public interface IAuthService extends UserDetailsService {
      * @return The token response.
      */
     TokenResponse refreshToken(RefreshRequest refreshToken);
+
+    /**
+     * Load a user by username.
+     *
+     * @param username The username.
+     * @return The user details.
+     * @throws UsernameNotFoundException If the user is not found.
+     */
+    User loadUser(String username) throws UsernameNotFoundException;
+
+    /**
+     * Get the current user from the JWT token.
+     *
+     * @param token The JWT token.
+     * @return The user details.
+     * @throws UsernameNotFoundException If the user is not found.
+     */
+    User getCurrentUser(JwtAuthenticationToken token) throws UsernameNotFoundException;
 
 }

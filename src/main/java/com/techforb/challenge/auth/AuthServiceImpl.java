@@ -13,6 +13,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.jwt.*;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -142,29 +143,6 @@ public class AuthServiceImpl implements IAuthService {
     }
 
     /**
-     * Load a user by username.
-     *
-     * @param username The username.
-     * @return The user details.
-     * @throws UsernameNotFoundException If the user is not found.
-     */
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // Split username into documentType and dni (e.g., "DNI:123456789")
-        String[] parts = username.split(":");
-
-        // Validate format
-        if (parts.length != 2) {
-            throw new IllegalArgumentException("Invalid documentTypePlusDni format");
-        }
-
-        // Find user by dni and documentType
-        return userRepository.findByDocumentTypeAndDni(DocumentType.valueOf(parts[0]), parts[1])
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-    }
-
-    /**
      * Refresh a JWT token.
      *
      * @param refreshToken The refresh token.
@@ -196,6 +174,67 @@ public class AuthServiceImpl implements IAuthService {
 
         // Generate a new token
         return generateToken(user);
+    }
+
+    /**
+     * Load a user by username.
+     *
+     * @param username The username.
+     * @return The user details.
+     * @throws UsernameNotFoundException If the user is not found.
+     */
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        // Split username into documentType and dni (e.g., "DNI:123456789")
+        String[] parts = username.split(":");
+
+        // Validate format
+        if (parts.length != 2) {
+            throw new IllegalArgumentException("Invalid documentTypePlusDni format");
+        }
+
+        // Find user by dni and documentType
+        return userRepository.findByDocumentTypeAndDni(DocumentType.valueOf(parts[0]), parts[1])
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+    }
+
+    /**
+     * Load a user by username.
+     *
+     * @param username The username.
+     * @return The user details.
+     * @throws UsernameNotFoundException If the user is not found.
+     */
+    public User loadUser(String username) throws UsernameNotFoundException {
+        // Split username into documentType and dni (e.g., "DNI:123456789")
+        String[] parts = username.split(":");
+
+        // Validate format
+        if (parts.length != 2) {
+            throw new IllegalArgumentException("Invalid documentTypePlusDni format");
+        }
+
+        // Find user by dni and documentType
+        return userRepository.findByDocumentTypeAndDni(DocumentType.valueOf(parts[0]), parts[1])
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
+
+    /**
+     * Get the current user from the JWT token.
+     *
+     * @param token The JWT token.
+     * @return The user details.
+     * @throws UsernameNotFoundException If the user is not found.
+     */
+    public User getCurrentUser(JwtAuthenticationToken token) throws UsernameNotFoundException {
+        // Decode the token
+        Jwt jwt = token.getToken();
+
+        String username = jwt.getClaim("sub");
+
+        // Get the user
+        return loadUser(username);
     }
 
 }
