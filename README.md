@@ -11,11 +11,28 @@ A simple API to manage bank accounts. This API was developed using Java 17, Spri
 
 ## Installation
 
+### Steps
+
 1. Clone the repository
-2. Create a PostgreSQL database named `unicomerbank`.
-3. Run the application using `mvn spring-boot:run` or `docker-compose up` if you have Docker installed.
-4. The application will be running on `http://localhost:8080`.
-5. You can access the Swagger UI on `http://localhost:8080/swagger-ui.html`.
+2. Create a PostgreSQL database named `unicomerbank`. Skip this step if you are using Docker.
+3. Create a `app.key` and `app.pub` files in the resources folder. You can generate them using openssl. More info below.
+4. Run the application using `mvn spring-boot:run` or `docker-compose up` if you have Docker installed.
+5. The application will be running on `http://localhost:8080`.
+6. You can access the Swagger UI on `http://localhost:8080/swagger-ui.html`.
+
+### OpenSSL
+
+#### Generate a private key
+
+```bash
+openssl genpkey -algorithm RSA -out app.key
+```
+
+#### Generate a public key
+
+```bash
+openssl rsa -pubout -in app.key -out app.pub
+```
 
 ## Usage
 
