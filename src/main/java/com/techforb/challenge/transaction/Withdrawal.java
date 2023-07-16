@@ -1,5 +1,6 @@
 package com.techforb.challenge.transaction;
 
+import com.techforb.challenge.transaction.strategy.WithdrawalStrategy;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,5 +17,12 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 public class Withdrawal extends Transaction {
+
+    /**
+     * Executes the withdrawal transaction.
+     */
+    public void execute() {
+        performTransaction(new WithdrawalStrategy());
+    }
 
 }

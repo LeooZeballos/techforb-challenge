@@ -1,5 +1,6 @@
 package com.techforb.challenge.transaction;
 
+import com.techforb.challenge.transaction.strategy.DepositStrategy;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import lombok.*;
@@ -17,5 +18,12 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 public class Deposit extends Transaction {
+
+    /**
+     * Executes the deposit transaction.
+     */
+    public void execute() {
+        performTransaction(new DepositStrategy());
+    }
 
 }

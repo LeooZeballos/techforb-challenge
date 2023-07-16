@@ -39,3 +39,9 @@ INSERT INTO account (id, account_number, balance, created_at, account_type_id, u
 INSERT INTO card (card_type, id, card_number, cvv, expiration_date, credit_limit, account_id, owner_id, titular)
 VALUES
     ('DEBIT_CARD', 1, '1234567890123456', '123', '2025-12-31', 5000.00, 1, 1, 'Leonel Ayrton Zeballos');
+
+-- TRANSACTION STATUS
+INSERT INTO transaction_status (id, name) VALUES
+    (1, 'PENDING'),
+    (2, 'APPROVED'),
+    (3, 'REJECTED');

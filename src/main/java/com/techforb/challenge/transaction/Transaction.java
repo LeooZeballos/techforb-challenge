@@ -2,8 +2,10 @@ package com.techforb.challenge.transaction;
 
 import com.techforb.challenge.account.Account;
 import com.techforb.challenge.card.Card;
+import com.techforb.challenge.transaction.strategy.TransactionStrategy;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
@@ -20,6 +22,7 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "transaction_type")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public abstract class Transaction {
@@ -67,6 +70,16 @@ public abstract class Transaction {
      * The transaction status history.
      */
     @OneToMany(mappedBy = "transaction", fetch = FetchType.LAZY)
-    private List<TransactionStatusHistory> statusHistory;
+    @Builder.Default
+    private List<TransactionStatusHistory> statusHistory = List.of();
+
+    /**
+     * Performs the transaction.
+     *
+     * @param strategy The strategy to use to perform the transaction.
+     */
+    public void performTransaction(TransactionStrategy strategy) {
+        strategy.executeTransaction(this);
+    }
 
 }
