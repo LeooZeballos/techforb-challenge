@@ -2,6 +2,8 @@ package com.techforb.challenge.menu;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
+
 import java.util.List;
 
 /**
@@ -24,7 +26,8 @@ public class OptionMenu {
     /**
      * The name of the option menu.
      */
-    @Column(name = "name")
+    @Column(name = "name", unique = true, nullable = false)
+    @Length(min = 3, max = 50)
     private String name;
 
     /**
