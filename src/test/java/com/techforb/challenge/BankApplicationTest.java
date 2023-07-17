@@ -2,17 +2,15 @@ package com.techforb.challenge;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
-/**
- * The main application test class.
- *
- * @author Leonel Zeballos
- */
-@SpringBootTest
-class BankApplicationTest {
+@SpringJUnitConfig
+@SpringBootTest(classes = BankApplication.class)
+public class BankApplicationTest {
 
     @Test
     void contextLoads() {
+        // Test that the Spring Boot application context loads successfully
     }
 
 }
