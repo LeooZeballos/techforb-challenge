@@ -1,0 +1,156 @@
+@startuml Class Diagram - Unicomer Bank
+
+class OptionMenu << (E,orchid) Entity >> {
+  - id: Long
+  - name: String
+  - enabled: boolean
+  --
+  + OptionMenu()
+}
+
+OptionMenu "1" --> "*" Option : options
+
+class Option << (E,orchid) Entity >> {
+  - id: Long
+  - name: String
+  - icon: String
+  - url: String
+  - order: int
+  --
+  + Option()
+}
+
+Option "*" --> "*" Role : roles
+
+class User << (E,orchid) Entity >> {
+  - id: Long
+  - dni: String
+  - email: String
+  - firstName: String
+  - lastName: String
+  - password: String
+  - documentType: DocumentType
+  --
+  + User()
+}
+
+User "*" --> "1" DocumentType : documentType
+User "*" --> "1" Role : role
+User "1" --> "*" Account : accounts
+
+
+enum Role {
+  - ADMIN
+  - USER
+  ...
+}
+
+enum DocumentType {
+  - DNI
+  - PASSPORT
+  - CEDULA
+  ...
+}
+
+class Account << (E,orchid) Entity >> {
+  - id: Long
+  - accountNumber: String
+  - createdAt: DateTime
+  - balance: double
+  --
+  + Account()
+}
+
+Account "1" --> "*" Card : cards
+Account "*" --> "1" AccountType : accountType
+
+class AccountType << (E,orchid) Entity >> {
+  - id: Long
+  - name: String
+  - description: String
+  --
+  + AccountType()
+}
+
+abstract class Card {
+  - id: Long
+  - cardNumber: String
+  - expirationDate: Date
+  - cvv: String
+  - owner: User
+  --
+  + Card()
+}
+
+Card "0..*" --> "1" User : owner
+
+class CreditCard << (E,orchid) Entity >> extends Card {
+  - creditLimit: double
+  --
+  + CreditCard()
+}
+
+class DebitCard << (E,orchid) Entity >> extends Card {
+  --
+  + DebitCard()
+}
+
+class DailyBalance {
+  - date: Date
+  - balance: double
+  - account: Account
+  --
+  + DailyBalance()
+}
+
+DailyBalance "*" --> "1" Account : account
+
+abstract class Transaction {
+  - id: Long
+  - amount: double
+  - date: Date
+  - description: String
+  - account: Account
+  - card: Card
+  --
+  + Transaction()
+}
+
+Transaction "*" --> "1" Account : account
+Transaction "1" --> "*" TransactionStateHistory : transactionStateHistory
+
+class TransactionStateHistory << (E,orchid) Entity >> {
+  - id: Long
+  - date: Date
+  - state: TransactionState
+  --
+  + TransactionStatusHistory()
+}
+
+TransactionStateHistory "*" --> "1" TransactionState : state
+
+class TransactionState << (E,orchid) Entity >> {
+  - id: Long
+  - name: String
+  - description: String
+  --
+  + TransactionStatus()
+}
+
+class Deposit << (E,orchid) Entity >> extends Transaction {
+  --
+  + Deposit()
+}
+
+class Withdrawal << (E,orchid) Entity >> extends Transaction {
+  --
+  + Withdrawal()
+}
+
+class Transfer << (E,orchid) Entity >> extends Transaction {
+  - destinationAccountNumber: String
+  --
+  + Transfer()
+}
+
+@enduml

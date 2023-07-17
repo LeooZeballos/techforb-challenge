@@ -1,0 +1,23 @@
+@startuml Transaction DTO
+
+left to right direction
+
+State "Pending" as PENDING #LightBlue
+State "Accepted" as ACCEPTED #LightGreen
+State "Rejected" as REJECTED #Pink
+State "In Progress" as IN_PROGRESS #Yellow
+State "Completed" as COMPLETED #GreenYellow
+State "Error" as ERROR #IndianRed
+
+
+[*] --> PENDING : new()
+PENDING --> ACCEPTED : accept()
+PENDING --> REJECTED : reject()
+ACCEPTED --> IN_PROGRESS : execute()
+IN_PROGRESS --> COMPLETED : complete()
+IN_PROGRESS --> ERROR : error()
+COMPLETED --> [*]
+REJECTED --> [*]
+ERROR --> [*]
+
+@enduml
