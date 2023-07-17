@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TransactionStatusHistory {
+public class TransactionStateHistory {
 
     /**
      * The unique identifier of the transaction status history.
@@ -21,11 +21,10 @@ public class TransactionStatusHistory {
     private Long id;
 
     /**
-     * The transaction status.
+     * The name of the transaction state.
      */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "transaction_status_id", nullable = false)
-    private TransactionStatus transactionStatus;
+    @Column(name = "transaction_state_name", nullable = false)
+    private String transactionStateName;
 
     /**
      * The transaction.
@@ -40,5 +39,12 @@ public class TransactionStatusHistory {
     @Column(name = "created_at", nullable = false)
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    /**
+     * The date when the transaction status history was ended.
+     * This field is null if the transaction status history is still active.
+     */
+    @Column(name = "ended_at")
+    private LocalDateTime endedAt;
 
 }
