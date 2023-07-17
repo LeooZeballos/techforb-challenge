@@ -164,6 +164,21 @@ GET /techforb/api/v1/transactions/latest
 | `accountNumber` | `string`   | **Required**. The account number.                      |
 | `page`          | `Pageable` | **Non required**. The page number and size, sort, etc. |
 
+### Balance
+
+#### Get daily balance
+
+```http
+GET /techforb/api/v1/balance
+```
+
+| Parameter       | Type       | Description                                                  |
+|:----------------|:-----------|:-------------------------------------------------------------|
+| `accountNumber` | `string`   | **Required**. The account number.                            |
+| `startDate`     | `DateTime` | **Non-required**. The start date. Defaults to two weeks ago. |
+| `endDate`       | `DateTime` | **Non-required**. The end date. Defaults to today.           |
+
+
 ## License
 
 [MIT Licence](https://choosealicense.com/licenses/mit/)
