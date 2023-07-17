@@ -33,7 +33,8 @@ INSERT INTO account_type (id, description, name) VALUES
 
 -- ACCOUNT FOR USER_ID 1
 INSERT INTO account (id, account_number, balance, created_at, account_type_id, user_id) VALUES
-    (1, '123456789', 1000.00, NOW(), 1, 1);
+    (1, '123456789', 1000.00, NOW(), 1, 1),
+    (2, '123456788', 1000.00, NOW(), 2, 1);
 
 -- CARD FOR ACCOUNT_ID 1
 INSERT INTO card (card_type, id, card_number, cvv, expiration_date, credit_limit, account_id, owner_id, titular)

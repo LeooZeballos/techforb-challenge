@@ -5,6 +5,7 @@ import com.techforb.challenge.account.AccountRepository;
 import com.techforb.challenge.card.Card;
 import com.techforb.challenge.card.CardRepository;
 import com.techforb.challenge.request.DepositRequest;
+import com.techforb.challenge.request.TransferRequest;
 import com.techforb.challenge.request.WithdrawalRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -152,6 +153,81 @@ public class TransactionServiceImpl implements ITransactionService {
 
         // Save the transaction.
         transactionRepository.save(withdrawal);
+
+        // Return success.
+        return TransactionCode.SUCCESS;
+    }
+
+    /**
+     * Make a transfer transaction.
+     *
+     * @param request the transfer request.
+     */
+    @Override
+    @Transactional
+    public TransactionCode transfer(TransferRequest request) {
+        // Get the source account from the repository.
+        Account sourceAccount = accountRepository.findByAccountNumber(request.sourceAccountNumber())
+                .orElseThrow(() -> new RuntimeException("Source account not found"));
+
+        // Get the destination account from the repository.
+        Account destinationAccount = accountRepository.findByAccountNumber(request.destinationAccountNumber())
+                .orElseThrow(() -> new RuntimeException("Destination account not found"));
+
+        // Get the card from the repository.
+        Card card = cardRepository.findByCardNumberAndExpirationDateAndCvvAndTitular(
+                request.cardNumber(),
+                request.cardExpirationDate(),
+                request.cardCvv(),
+                request.cardHolderName()
+                )
+                .orElseThrow(() -> new RuntimeException("Card not found"));
+
+        // Create the Transfer transaction.
+        Transfer transfer = new Transfer(
+                request.amount(),
+                request.description(),
+                sourceAccount,
+                destinationAccount,
+                card
+        );
+
+        // Check if the source account has enough balance.
+        if (sourceAccount.getBalance() < transfer.getAmount()) {
+            // Reject the transaction.
+            transfer.reject();
+            // Save the transaction.
+            transactionRepository.save(transfer);
+            // Return insufficient funds.
+            return TransactionCode.INSUFFICIENT_FUNDS;
+        }
+
+        // Accept the transaction.
+        transfer.accept();
+
+        // Execute the transaction.
+        try {
+            transfer.execute();
+        } catch (Exception e) {
+            // If the transaction failed, error it.
+            transfer.error();
+            // Save the transaction.
+            transactionRepository.save(transfer);
+            // Return error.
+            return TransactionCode.ERROR;
+        }
+
+        // If the transaction was successful, complete it.
+        transfer.complete();
+
+        // Save the source account.
+        accountRepository.save(sourceAccount);
+
+        // Save the destination account.
+        accountRepository.save(destinationAccount);
+
+        // Save the transaction.
+        transactionRepository.save(transfer);
 
         // Return success.
         return TransactionCode.SUCCESS;

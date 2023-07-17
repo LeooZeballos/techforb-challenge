@@ -19,22 +19,16 @@ import lombok.*;
 @DiscriminatorValue("TRANSFER")
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 public class Transfer extends Transaction {
 
     /**
      * Constructs a transfer transaction.
      */
-    public Transfer(double amount, String description, Account account, String destinationAccountNumber, Card card) {
+    public Transfer(double amount, String description, Account account, Account destinationAccount, Card card) {
         super(amount, description, account, card);
-        this.destinationAccountNumber = destinationAccountNumber;
+        this.setDestinationAccount(destinationAccount);
     }
-
-    /**
-     * The account number of the destination account.
-     */
-    private String destinationAccountNumber;
 
     /**
      * Executes the transfer transaction.

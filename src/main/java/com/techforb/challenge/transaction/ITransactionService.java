@@ -1,6 +1,7 @@
 package com.techforb.challenge.transaction;
 
 import com.techforb.challenge.request.DepositRequest;
+import com.techforb.challenge.request.TransferRequest;
 import com.techforb.challenge.request.WithdrawalRequest;
 
 /**
@@ -24,5 +25,10 @@ public interface ITransactionService {
      * @param request the withdrawal request.
      */
     TransactionCode withdrawal(WithdrawalRequest request);
+
+    /**
+     * Make a transfer transaction.
+     */
+    TransactionCode transfer(TransferRequest request);
 
 }

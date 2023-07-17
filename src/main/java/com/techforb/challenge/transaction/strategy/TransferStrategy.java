@@ -9,8 +9,14 @@ import com.techforb.challenge.transaction.Transaction;
  * @author Leonel Zeballos
  */
 public class TransferStrategy implements TransactionStrategy {
+
     @Override
     public void executeTransaction(Transaction transaction) {
-        // TODO: Implement
+        // Subtract the amount from the source account
+        transaction.getAccount().setBalance(transaction.getAccount().getBalance() - transaction.getAmount());
+
+        // Add the amount to the destination account
+        transaction.getDestinationAccount().setBalance(transaction.getDestinationAccount().getBalance() + transaction.getAmount());
     }
+
 }

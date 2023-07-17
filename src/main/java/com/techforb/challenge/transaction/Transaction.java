@@ -75,6 +75,13 @@ public abstract class Transaction {
     private List<TransactionStateHistory> stateHistory;
 
     /**
+     * The account number of the destination account.
+     * This field is only used for transfers.
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Account destinationAccount;
+
+    /**
      * Constructor with the required fields.
      */
     public Transaction(double amount, String description, Account account, Card card) {

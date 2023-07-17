@@ -1,6 +1,7 @@
 package com.techforb.challenge.transaction;
 
 import com.techforb.challenge.request.DepositRequest;
+import com.techforb.challenge.request.TransferRequest;
 import com.techforb.challenge.request.WithdrawalRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -60,6 +61,23 @@ public class TransactionController {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("Withdrawal failed. An error occurred.");
+        }
+    }
+
+    @PostMapping("/transfer")
+    public ResponseEntity<String> transfer(@RequestBody TransferRequest request) {
+        try {
+            return switch (transactionService.transfer(request)) {
+                case SUCCESS -> ResponseEntity.ok(
+                        "Transfer successful. Transferred " + request.amount() + " from account " + request.sourceAccountNumber() + " to account " + request.destinationAccountNumber()
+                );
+                case INSUFFICIENT_FUNDS -> ResponseEntity.badRequest().body("Transfer failed. Insufficient funds.");
+                case ERROR -> ResponseEntity.badRequest().body("Transfer failed. An error occurred.");
+            };
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Transfer failed. An error occurred.");
         }
     }
 
