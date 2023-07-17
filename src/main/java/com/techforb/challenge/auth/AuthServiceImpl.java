@@ -105,7 +105,15 @@ public class AuthServiceImpl implements IAuthService {
     public TokenResponse login(LoginRequest loginRequest) {
         // Validate user credentials
         try {
-            UserDetails user = loadUserByUsername(loginRequest.documentType() + ":" + loginRequest.dni());
+            // Search user
+            User user = loadUser(loginRequest.documentType() + ":" + loginRequest.dni());
+
+            // Validate password
+            if (!user.getPassword().equals(loginRequest.password())) {
+                throw new IllegalArgumentException("Invalid credentials for " + loginRequest.documentType().toLowerCase() + ": " + loginRequest.dni());
+            }
+
+            // Generate token
             return generateToken(user);
         } catch (UsernameNotFoundException e) {
             throw new IllegalArgumentException("Invalid credentials for " + loginRequest.documentType().toLowerCase() + ": " + loginRequest.dni());
