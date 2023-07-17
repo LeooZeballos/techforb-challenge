@@ -26,8 +26,7 @@ public class Transfer extends Transaction {
      * Constructs a transfer transaction.
      */
     public Transfer(double amount, String description, Account account, Account destinationAccount, Card card) {
-        super(amount, description, account, card);
-        this.setDestinationAccount(destinationAccount);
+        super(amount, description, account, card, destinationAccount);
     }
 
     /**

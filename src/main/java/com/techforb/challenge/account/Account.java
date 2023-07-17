@@ -83,4 +83,8 @@ public class Account {
     @JsonIgnore
     private List<Transaction> transactions = List.of();
 
+    @OneToMany(mappedBy = "destinationAccount", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Transaction> incomingTransactions = List.of();
+
 }

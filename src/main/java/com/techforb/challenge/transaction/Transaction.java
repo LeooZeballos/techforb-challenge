@@ -79,10 +79,11 @@ public abstract class Transaction {
      * This field is only used for transfers.
      */
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "destination_account_id")
     private Account destinationAccount;
 
     /**
-     * Constructor with the required fields.
+     * Constructor with the required fields. This constructor is used for withdrawals and deposits.
      */
     public Transaction(double amount, String description, Account account, Card card) {
         this.amount = amount;
@@ -90,6 +91,23 @@ public abstract class Transaction {
         this.description = description;
         this.account = account;
         this.card = card;
+        this.stateHistory = new ArrayList<>();
+        this.stateHistory.add(TransactionStateHistory.builder()
+                .transactionStateName(TransactionState.getInstance("PENDING").getName())
+                .transaction(this)
+                .build());
+    }
+
+    /**
+     * Constructor with the required fields. This constructor is used for transfers.
+     */
+    public Transaction(double amount, String description, Account account, Card card, Account destinationAccount) {
+        this.amount = amount;
+        this.date = LocalDateTime.now();
+        this.description = description;
+        this.account = account;
+        this.card = card;
+        this.destinationAccount = destinationAccount;
         this.stateHistory = new ArrayList<>();
         this.stateHistory.add(TransactionStateHistory.builder()
                 .transactionStateName(TransactionState.getInstance("PENDING").getName())

@@ -1,6 +1,5 @@
 package com.techforb.challenge.balance;
 
-import com.techforb.challenge.account.Account;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,10 +25,5 @@ public class DailyBalance {
      * The balance of the account on the date.
      */
     private double balance;
-
-    /**
-     * The account the balance belongs to.
-     */
-    private Account account;
 
 }
