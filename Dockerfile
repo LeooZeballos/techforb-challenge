@@ -14,8 +14,8 @@ COPY src ./src
 # Build the application, skipping the tests
 RUN mvn clean package -DskipTests
 
-# Create a new image with JRE only
-FROM openjdk:17-alpine
+# Use a base image with JDK 17 to run the application
+FROM openjdk:17
 
 # Set the working directory
 WORKDIR /app
