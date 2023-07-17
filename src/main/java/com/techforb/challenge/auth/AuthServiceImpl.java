@@ -51,7 +51,7 @@ public class AuthServiceImpl implements IAuthService {
     /**
      * The JWT expiration time in seconds.
      */
-    private final static long JWT_EXPIRATION_TIME = 60 * 60 * 24; // 1 day
+    private final static long JWT_EXPIRATION_TIME = 60 * 60; // 1 hour
 
 
     /**
