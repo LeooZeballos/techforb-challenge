@@ -59,26 +59,26 @@ public abstract class Transaction {
     /**
      * The transaction account.
      */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Account account;
 
     /**
      * The transaction card.
      */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Card card;
 
     /**
      * The transaction status history.
      */
-    @OneToMany(mappedBy = "transaction", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "transaction", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<TransactionStateHistory> stateHistory;
 
     /**
      * The account number of the destination account.
      * This field is only used for transfers.
      */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Account destinationAccount;
 
     /**

@@ -1,5 +1,6 @@
 package com.techforb.challenge.account;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.techforb.challenge.card.Card;
 import com.techforb.challenge.transaction.Transaction;
 import com.techforb.challenge.user.User;
@@ -63,6 +64,7 @@ public class Account {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     @ToString.Exclude
+    @JsonIgnore
     private User user;
 
     /**
@@ -70,6 +72,7 @@ public class Account {
      */
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     @Builder.Default
+    @JsonIgnore
     private List<Card> cards = List.of();
 
     /**
@@ -77,6 +80,7 @@ public class Account {
      */
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     @Builder.Default
+    @JsonIgnore
     private List<Transaction> transactions = List.of();
 
 }

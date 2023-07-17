@@ -5,11 +5,10 @@ import com.techforb.challenge.request.TransferRequest;
 import com.techforb.challenge.request.WithdrawalRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Transaction controller.
@@ -79,6 +78,22 @@ public class TransactionController {
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("Transfer failed. An error occurred.");
         }
+    }
+
+    @GetMapping("/latest")
+    public ResponseEntity<Page<Transaction>> getLatestTransactions(
+            @RequestParam String accountNumber,
+            Pageable page
+    ) {
+        try {
+            return ResponseEntity.ok(transactionService.getLatestTransactions(accountNumber, page));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            log.error("An error occurred while getting latest transactions", e);
+            return ResponseEntity.internalServerError().build();
+        }
+
     }
 
 }

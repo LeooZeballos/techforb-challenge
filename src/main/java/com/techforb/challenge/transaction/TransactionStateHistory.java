@@ -1,5 +1,6 @@
 package com.techforb.challenge.transaction;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -31,6 +32,7 @@ public class TransactionStateHistory {
      */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "transaction_id", nullable = false)
+    @JsonIgnore
     private Transaction transaction;
 
     /**

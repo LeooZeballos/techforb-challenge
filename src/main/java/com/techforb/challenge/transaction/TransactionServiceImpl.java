@@ -9,6 +9,8 @@ import com.techforb.challenge.request.TransferRequest;
 import com.techforb.challenge.request.WithdrawalRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 /**
@@ -231,6 +233,16 @@ public class TransactionServiceImpl implements ITransactionService {
 
         // Return success.
         return TransactionCode.SUCCESS;
+    }
+
+    /**
+     * Get the latest transactions.
+     *
+     * @param page the page.
+     */
+    @Override
+    public Page<Transaction> getLatestTransactions(String accountNumber, Pageable page) {
+        return transactionRepository.findAllByAccount_AccountNumberOrderByDateDesc(accountNumber, page);
     }
 
 }
