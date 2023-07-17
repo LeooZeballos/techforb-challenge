@@ -84,15 +84,6 @@ public abstract class TransactionState {
     }
 
     /**
-     * Cancel the transaction
-     *
-     * @param transaction the transaction to cancel
-     */
-    public void cancel(Transaction transaction) {
-        throw new UnsupportedOperationException("Cannot cancel transaction in state: " + this.getName());
-    }
-
-    /**
      * Get the instance of the transaction state.
      * This is a singleton.
      *

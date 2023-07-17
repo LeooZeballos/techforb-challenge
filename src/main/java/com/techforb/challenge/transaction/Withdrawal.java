@@ -22,7 +22,7 @@ public class Withdrawal extends Transaction {
      * Executes the withdrawal transaction.
      */
     public void execute() {
-        performTransaction(new WithdrawalStrategy());
+        super.execute(this, new WithdrawalStrategy());
     }
 
 }

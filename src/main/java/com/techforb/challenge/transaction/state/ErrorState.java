@@ -1,7 +1,5 @@
 package com.techforb.challenge.transaction.state;
 
-import com.techforb.challenge.transaction.Transaction;
-
 /**
  * Error state of a transaction.
  * This state is used to indicate that a transaction has an error.

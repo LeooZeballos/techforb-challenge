@@ -23,7 +23,7 @@ public class Deposit extends Transaction {
      * Executes the deposit transaction.
      */
     public void execute() {
-        performTransaction(new DepositStrategy());
+        super.execute(this, new DepositStrategy());
     }
 
 }

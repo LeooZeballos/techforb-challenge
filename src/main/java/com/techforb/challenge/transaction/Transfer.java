@@ -30,7 +30,7 @@ public class Transfer extends Transaction {
      * Executes the transfer transaction.
      */
     public void execute() {
-        performTransaction(new TransferStrategy());
+        super.execute(this, new TransferStrategy());
     }
 
 }
