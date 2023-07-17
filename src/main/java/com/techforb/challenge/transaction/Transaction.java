@@ -6,7 +6,6 @@ import com.techforb.challenge.transaction.strategy.TransactionStrategy;
 import com.techforb.challenge.transaction.state.TransactionState;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -53,7 +52,7 @@ public abstract class Transaction {
     /**
      * The transaction description.
      */
-    @Column(name = "description", nullable = false)
+    @Column(name = "description")
     @Length(max = 50)
     private String description;
 
@@ -72,16 +71,15 @@ public abstract class Transaction {
     /**
      * The transaction status history.
      */
-    @OneToMany(mappedBy = "transaction", fetch = FetchType.LAZY)
-    @Builder.Default
-    private List<TransactionStateHistory> stateHistory = List.of();
+    @OneToMany(mappedBy = "transaction", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<TransactionStateHistory> stateHistory;
 
     /**
      * Constructor with the required fields.
      */
-    public Transaction(double amount, LocalDateTime date, String description, Account account, Card card) {
+    public Transaction(double amount, String description, Account account, Card card) {
         this.amount = amount;
-        this.date = date;
+        this.date = LocalDateTime.now();
         this.description = description;
         this.account = account;
         this.card = card;
@@ -127,47 +125,37 @@ public abstract class Transaction {
 
     /**
      * Accept the transaction
-     *
-     * @param transaction the transaction to accept
      */
-    public void accept(Transaction transaction) {
-        transaction.getCurrentState().accept(transaction);
+    public void accept() {
+        this.getCurrentState().accept(this);
     }
 
     /**
      * Reject the transaction
-     *
-     * @param transaction the transaction to reject
      */
-    public void reject(Transaction transaction) {
-        transaction.getCurrentState().reject(transaction);
+    public void reject() {
+        this.getCurrentState().reject(this);
     }
 
     /**
      * Execute the transaction
-     *
-     * @param transaction the transaction to execute
      */
-    public void execute(Transaction transaction, TransactionStrategy transactionStrategy) {
-        transaction.getCurrentState().execute(transaction, transactionStrategy);
+    public void execute(TransactionStrategy transactionStrategy) {
+        this.getCurrentState().execute(this, transactionStrategy);
     }
 
     /**
      * Complete the transaction
-     *
-     * @param transaction the transaction to complete
      */
-    public void complete(Transaction transaction) {
-        transaction.getCurrentState().complete(transaction);
+    public void complete() {
+        this.getCurrentState().complete(this);
     }
 
     /**
      * Error the transaction
-     *
-     * @param transaction the transaction to error
      */
-    public void error(Transaction transaction) {
-        transaction.getCurrentState().error(transaction);
+    public void error() {
+        this.getCurrentState().error(this);
     }
 
 }

@@ -1,5 +1,7 @@
 package com.techforb.challenge.transaction;
 
+import com.techforb.challenge.account.Account;
+import com.techforb.challenge.card.Card;
 import com.techforb.challenge.transaction.strategy.TransferStrategy;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
@@ -22,6 +24,14 @@ import lombok.*;
 public class Transfer extends Transaction {
 
     /**
+     * Constructs a transfer transaction.
+     */
+    public Transfer(double amount, String description, Account account, String destinationAccountNumber, Card card) {
+        super(amount, description, account, card);
+        this.destinationAccountNumber = destinationAccountNumber;
+    }
+
+    /**
      * The account number of the destination account.
      */
     private String destinationAccountNumber;
@@ -30,7 +40,7 @@ public class Transfer extends Transaction {
      * Executes the transfer transaction.
      */
     public void execute() {
-        super.execute(this, new TransferStrategy());
+        super.execute(new TransferStrategy());
     }
 
 }

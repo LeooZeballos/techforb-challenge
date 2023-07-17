@@ -1,5 +1,7 @@
 package com.techforb.challenge.transaction;
 
+import com.techforb.challenge.account.Account;
+import com.techforb.challenge.card.Card;
 import com.techforb.challenge.transaction.strategy.DepositStrategy;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
@@ -15,15 +17,21 @@ import lombok.*;
 @Entity
 @DiscriminatorValue("DEPOSIT")
 @Data
-@Builder
 @NoArgsConstructor
 public class Deposit extends Transaction {
+
+    /**
+     * Constructs a deposit transaction.
+     */
+    public Deposit(double amount, String description, Account accountNumber, Card card) {
+        super(amount, description, accountNumber, card);
+    }
 
     /**
      * Executes the deposit transaction.
      */
     public void execute() {
-        super.execute(this, new DepositStrategy());
+        super.execute(new DepositStrategy());
     }
 
 }

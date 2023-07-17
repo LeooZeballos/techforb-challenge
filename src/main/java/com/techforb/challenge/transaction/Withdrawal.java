@@ -1,5 +1,7 @@
 package com.techforb.challenge.transaction;
 
+import com.techforb.challenge.account.Account;
+import com.techforb.challenge.card.Card;
 import com.techforb.challenge.transaction.strategy.WithdrawalStrategy;
 import jakarta.persistence.*;
 import lombok.*;
@@ -14,15 +16,21 @@ import lombok.*;
 @Entity
 @DiscriminatorValue("WITHDRAWAL")
 @Data
-@Builder
 @NoArgsConstructor
 public class Withdrawal extends Transaction {
+
+    /**
+     * Constructs a withdrawal transaction.
+     */
+    public Withdrawal(double amount, String description, Account accountNumber, Card card) {
+        super(amount, description, accountNumber, card);
+    }
 
     /**
      * Executes the withdrawal transaction.
      */
     public void execute() {
-        super.execute(this, new WithdrawalStrategy());
+        super.execute(new WithdrawalStrategy());
     }
 
 }
