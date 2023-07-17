@@ -8,7 +8,7 @@ A simple API to manage bank accounts. This API was developed using Java 17, Spri
 - [Installation](#installation)
 - [Usage](#usage)
 - [License](#license)
-- 
+
 ## Requirements
 
 - Java 17
