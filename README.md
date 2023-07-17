@@ -34,12 +34,18 @@ openssl genpkey -algorithm RSA -out app.key
 openssl rsa -pubout -in app.key -out app.pub
 ```
 
+## Documentation
+
+The API documentation is available on the Swagger endpoint `https://zeballos.live/techforb/swagger-ui.html`.
+
 ## Usage
 
-### Create a new account
+### Authentication
+
+#### Register
 
 ```http
-POST /api/v1/auth/register
+POST /techforb/api/v1/auth/register
 ```
 
 | Parameter      | Type     | Description                                                            |
@@ -52,10 +58,10 @@ POST /api/v1/auth/register
 | `documentType` | `string` | **Required**. The user's document type. One of DNI, PASSPORT or CEDULA |
 
 
-### Login
+#### Login
 
 ```http
-POST /api/v1/auth/login
+POST /techforb/api/v1/auth/login
 ```
 
 | Parameter      | Type     | Description                                                            |
@@ -65,16 +71,87 @@ POST /api/v1/auth/login
 | `documentType` | `string` | **Required**. The user's document type. One of DNI, PASSPORT or CEDULA |
 
 
-### Refresh token
+#### Refresh token
 
 ```http
-POST /api/v1/auth/refresh
+POST /techforb/api/v1/auth/refresh
 ```
 
 | Parameter      | Type     | Description                         |
 |:---------------|:---------|:------------------------------------|
 | `refreshToken` | `string` | **Required**. The token to refresh. |
 
+### Menu
+
+#### Get menu
+
+```http
+GET /techforb/api/v1/option-menu
+```
+
+| Parameter | Type     | Description                                                             |
+|:----------|:---------|:------------------------------------------------------------------------|
+| `name`    | `string` | **Non required**. The name of the menu. The default value is `default`. |
+
+
+### Cards
+
+#### Get user cards
+
+```http
+GET /techforb/api/v1/cards
+```
+
+### Transactions
+
+#### Deposit
+
+```http
+POST /techforb/api/v1/transactions/deposit
+```
+
+| Parameter            | Type     | Description                                           |
+|:---------------------|:---------|:------------------------------------------------------|
+| `accountNumber`      | `string` | **Required**. The account number.                     |
+| `amount`             | `double` | **Required**. The amount to deposit.                  |
+| `description`        | `string` | **Non required**. The description of the transaction. |
+| `cardNumber`         | `string` | **Required**. The card number.                        |
+| `cardHolderName`     | `string` | **Required**. The card holder name.                   |
+| `cardExpirationDate` | `string` | **Required**. The card expiration date.               |
+| `cardCvv`            | `string` | **Required**. The card CVV.                           |
+
+#### Withdraw
+
+```http
+POST /techforb/api/v1/transactions/withdraw
+```
+
+| Parameter            | Type     | Description                                           |
+|:---------------------|:---------|:------------------------------------------------------|
+| `accountNumber`      | `string` | **Required**. The account number.                     |
+| `amount`             | `double` | **Required**. The amount to withdraw.                 |
+| `description`        | `string` | **Non required**. The description of the transaction. |
+| `cardNumber`         | `string` | **Required**. The card number.                        |
+| `cardHolderName`     | `string` | **Required**. The card holder name.                   |
+| `cardExpirationDate` | `string` | **Required**. The card expiration date.               |
+| `cardCvv`            | `string` | **Required**. The card CVV.                           |
+
+#### Transfer
+
+```http
+POST /techforb/api/v1/transactions/transfer
+```
+
+| Parameter             | Type     | Description                                           |
+|:----------------------|:---------|:------------------------------------------------------|
+| `sourceAccountNumber` | `string` | **Required**. The account number.                     |
+| `targetAccountNumber` | `string` | **Required**. The account number.                     |
+| `amount`              | `double` | **Required**. The amount to transfer.                 |
+| `description`         | `string` | **Non required**. The description of the transaction. |
+| `cardNumber`          | `string` | **Required**. The card number.                        |
+| `cardHolderName`      | `string` | **Required**. The card holder name.                   |
+| `cardExpirationDate`  | `string` | **Required**. The card expiration date.               |
+| `cardCvv`             | `string` | **Required**. The card CVV.                           |
 
 ## License
 
