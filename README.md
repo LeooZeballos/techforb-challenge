@@ -153,6 +153,17 @@ POST /techforb/api/v1/transactions/transfer
 | `cardExpirationDate`  | `string` | **Required**. The card expiration date.               |
 | `cardCvv`             | `string` | **Required**. The card CVV.                           |
 
+#### Latest transactions
+
+```http
+GET /techforb/api/v1/transactions/latest
+```
+
+| Parameter       | Type       | Description                                            |
+|:----------------|:-----------|:-------------------------------------------------------|
+| `accountNumber` | `string`   | **Required**. The account number.                      |
+| `page`          | `Pageable` | **Non required**. The page number and size, sort, etc. |
+
 ## License
 
 [MIT Licence](https://choosealicense.com/licenses/mit/)
