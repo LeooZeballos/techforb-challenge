@@ -2,6 +2,13 @@
 
 A simple API to manage bank accounts. This API was developed using Java 17, Spring Boot, Maven, and a PostgreSQL database.
 
+## Table of contents
+
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Usage](#usage)
+- [License](#license)
+- 
 ## Requirements
 
 - Java 17
@@ -33,10 +40,6 @@ openssl genpkey -algorithm RSA -out app.key
 ```bash
 openssl rsa -pubout -in app.key -out app.pub
 ```
-
-## Documentation
-
-The API documentation is available on the Swagger endpoint `https://zeballos.live/techforb/swagger-ui.html`.
 
 ## Usage
 
